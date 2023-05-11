@@ -8,36 +8,39 @@ import NavBar from '../components/NavBar'
 import NavBarItemPlain from '../components/NavBarItemPlain'
 import AsideMenu from '../components/AsideMenu'
 import FooterBar from '../components/FooterBar'
-import { setUser } from '../stores/mainSlice'
 import { useAppDispatch, useAppSelector } from '../stores/hooks'
 import FormField from '../components/FormField'
 import { Field, Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
+import {useSelector} from "react-redux";
+import {useGetUserData} from "../helpers/useGetUserData";
 
 type Props = {
   children: ReactNode
 }
 
 export default function LayoutAuthenticated({ children }: Props) {
+  const router = useRouter()
   const dispatch = useAppDispatch()
+  const userUuid = useSelector((state) => state.user.uuid);
+
+  useGetUserData()
 
   useEffect(() => {
-    dispatch(
-      setUser({
-        name: 'John Doe',
-        email: 'john@example.com',
-        avatar:
-          'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93',
-      })
-    )
-  })
+    if (userUuid !== null) {
+      router.push('/dashboard')
+    } else {
+      router.push('/')
+    }
+  }, [userUuid])
+
+
 
   const darkMode = useAppSelector((state) => state.style.darkMode)
 
   const [isAsideMobileExpanded, setIsAsideMobileExpanded] = useState(false)
   const [isAsideLgActive, setIsAsideLgActive] = useState(false)
 
-  const router = useRouter()
 
   useEffect(() => {
     const handleRouteChangeStart = () => {
@@ -104,7 +107,7 @@ export default function LayoutAuthenticated({ children }: Props) {
         <FooterBar>
           Get more with{` `}
           <a
-            href="https://tailwind-react.justboil.me/dashboard"
+            href="https://dashboard"
             target="_blank"
             rel="noreferrer"
             className="text-blue-600"

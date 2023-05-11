@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { store } from '../stores/store'
+import {store, wrapper} from '../stores/store'
 import { Provider } from 'react-redux'
 import '../css/main.css'
 
@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <meta property="twitter:image:width" content={imageWidth} />
             <meta property="twitter:image:height" content={imageHeight} />
 
-            <link rel="icon" href="/admin-one-react-tailwind/favicon.png" />
+            <link rel="icon" href="/favicon.png" />
           </Head>
 
           <Script
@@ -79,4 +79,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   )
 }
 
-export default MyApp
+
+MyApp.getInitialProps = wrapper.getInitialAppProps(
+  store =>
+    async ({ctx, Component}) => {
+      return {
+        pageProps: {
+          ...(Component.getInitialProps ? await Component.getInitialProps({...ctx, store}) : {}),
+        }
+      }
+    }
+)
+
+
+export default wrapper.withRedux(MyApp)

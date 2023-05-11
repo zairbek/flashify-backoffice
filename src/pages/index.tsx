@@ -9,16 +9,15 @@ import {Field, Form, Formik} from 'formik'
 import FormField from '../components/FormField'
 import BaseDivider from '../components/BaseDivider'
 import BaseButtons from '../components/BaseButtons'
-import {useRouter} from 'next/router'
 import {getPageTitle} from '../config'
 import {useStoreDispatch} from "../stores/store";
 import {authorization} from "../stores/auth/AuthDataStore";
 import * as Yup from 'yup';
 import {SignInError, Token} from "../api/auth/types";
 import {ValidationErrors} from "../api/root/types";
+import {getMeAction} from "../stores/user/UserStore";
 
-export default function Error() {
-  const router = useRouter()
+export default function SignIn() {
   const dispatch = useStoreDispatch()
 
   const signInSchema = Yup.object().shape({
@@ -42,6 +41,7 @@ export default function Error() {
       } else {
         const token = res.payload as Token
         localStorage.setItem('token', JSON.stringify(token));
+        dispatch(getMeAction({accessToken: token.accessToken}))
       }
     })
   }
@@ -98,6 +98,14 @@ export default function Error() {
   )
 }
 
-Error.getLayout = function getLayout(page: ReactElement) {
+SignIn.getLayout = function getLayout(page: ReactElement) {
   return <LayoutGuest>{page}</LayoutGuest>
+}
+
+export const getServerSideProps = async ({ req, params }) => {
+  return {
+    props: {
+      data: {}
+    }
+  }
 }
