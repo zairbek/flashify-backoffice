@@ -2,36 +2,36 @@ import {
   mdiAccount,
   mdiAsterisk,
   mdiFormTextboxPassword,
-  mdiGithub,
   mdiMail,
   mdiUpload,
 } from '@mdi/js'
 import { Formik, Form, Field } from 'formik'
 import Head from 'next/head'
 import type { ReactElement } from 'react'
-import BaseButton from '../components/BaseButton'
-import BaseButtons from '../components/BaseButtons'
-import BaseDivider from '../components/BaseDivider'
-import CardBox from '../components/CardBox'
-import CardBoxComponentBody from '../components/CardBoxComponentBody'
-import CardBoxComponentFooter from '../components/CardBoxComponentFooter'
-import FormField from '../components/FormField'
-import FormFilePicker from '../components/FormFilePicker'
-import LayoutAuthenticated from '../layouts/Authenticated'
-import SectionMain from '../components/SectionMain'
-import SectionTitleLineWithButton from '../components/SectionTitleLineWithButton'
-import UserCard from '../components/UserCard'
-import type { UserForm } from '../interfaces'
-import { getPageTitle } from '../config'
-import { useAppSelector } from '../stores/hooks'
+import BaseButton from '../../components/BaseButton'
+import BaseButtons from '../../components/BaseButtons'
+import BaseDivider from '../../components/BaseDivider'
+import CardBox from '../../components/CardBox'
+import CardBoxComponentBody from '../../components/CardBoxComponentBody'
+import CardBoxComponentFooter from '../../components/CardBoxComponentFooter'
+import FormField from '../../components/FormField'
+import FormFilePicker from '../../components/FormFilePicker'
+import LayoutAuthenticated from '../../layouts/Authenticated'
+import SectionMain from '../../components/SectionMain'
+import SectionTitleLineWithButton from '../../components/SectionTitleLineWithButton'
+import UserCard from '../../components/UserCard'
+import type { UserForm } from '../../interfaces'
+import { getPageTitle } from '../../config'
+import { useAppSelector } from '../../stores/hooks'
+import {NextPageWithLayout} from "../_app";
+import {useSelector} from "react-redux";
 
-const ProfilePage = () => {
-  const userName = useAppSelector((state) => state.main.userName)
-  const userEmail = useAppSelector((state) => state.main.userEmail)
+const Profile: NextPageWithLayout = () => {
+  const userData = useSelector((state: any) => state.user)
 
   const userForm: UserForm = {
-    name: userName,
-    email: userEmail,
+    name: userData.firstName,
+    email: userData.email,
   }
 
   return (
@@ -41,18 +41,6 @@ const ProfilePage = () => {
       </Head>
 
       <SectionMain>
-        <SectionTitleLineWithButton icon={mdiAccount} title="Profile" main>
-          <BaseButton
-            href="https://github.com/justboil/admin-one-react-tailwind"
-            target="_blank"
-            icon={mdiGithub}
-            label="Star on GitHub"
-            color="contrast"
-            roundedFull
-            small
-          />
-        </SectionTitleLineWithButton>
-
         <UserCard className="mb-6" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -169,8 +157,17 @@ const ProfilePage = () => {
   )
 }
 
-ProfilePage.getLayout = function getLayout(page: ReactElement) {
+Profile.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
 
-export default ProfilePage
+
+export const getServerSideProps = async ({ req, params }) => {
+  return {
+    props: {
+      data: {}
+    }
+  }
+}
+
+export default Profile

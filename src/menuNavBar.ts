@@ -8,8 +8,6 @@ import {
   mdiEmail,
   mdiLogout,
   mdiThemeLightDark,
-  mdiGithub,
-  mdiVuejs,
 } from '@mdi/js'
 import { MenuNavBarItem } from './interfaces'
 
@@ -40,23 +38,23 @@ const menuNavBar: MenuNavBarItem[] = [
     menu: [
       {
         icon: mdiAccount,
-        label: 'My Profile',
+        label: 'Аккаунт',
         href: '/profile',
       },
       {
         icon: mdiCogOutline,
-        label: 'Settings',
+        label: 'Настройки',
       },
       {
         icon: mdiEmail,
-        label: 'Messages',
+        label: 'Письмы',
       },
       {
         isDivider: true,
       },
       {
         icon: mdiLogout,
-        label: 'Log Out',
+        label: 'Выйти',
         isLogout: true,
       },
     ],
@@ -68,22 +66,8 @@ const menuNavBar: MenuNavBarItem[] = [
     isToggleLightDark: true,
   },
   {
-    icon: mdiGithub,
-    label: 'GitHub',
-    isDesktopNoLabel: true,
-    href: 'https://github.com/justboil/admin-one-react-tailwind',
-    target: '_blank',
-  },
-  {
-    icon: mdiVuejs,
-    label: 'Vue version',
-    isDesktopNoLabel: true,
-    href: 'https://github.com/justboil/admin-one-vue-tailwind',
-    target: '_blank',
-  },
-  {
     icon: mdiLogout,
-    label: 'Log out',
+    label: 'Выйти',
     isDesktopNoLabel: true,
     isLogout: true,
   },

@@ -1,7 +1,7 @@
 import React, {ReactNode, useEffect} from 'react'
 import {useAppDispatch, useAppSelector} from '../stores/hooks'
 import {useSelector} from "react-redux";
-import {useGetUserData} from "../helpers/useGetUserData";
+import {useGetUserData} from "../hooks/useGetUserData";
 import {useRouter} from "next/router";
 
 type Props = {

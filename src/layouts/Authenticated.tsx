@@ -7,13 +7,12 @@ import BaseIcon from '../components/BaseIcon'
 import NavBar from '../components/NavBar'
 import NavBarItemPlain from '../components/NavBarItemPlain'
 import AsideMenu from '../components/AsideMenu'
-import FooterBar from '../components/FooterBar'
 import { useAppDispatch, useAppSelector } from '../stores/hooks'
 import FormField from '../components/FormField'
 import { Field, Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
 import {useSelector} from "react-redux";
-import {useGetUserData} from "../helpers/useGetUserData";
+import {useGetUserData} from "../hooks/useGetUserData";
 
 type Props = {
   children: ReactNode
@@ -104,17 +103,6 @@ export default function LayoutAuthenticated({ children }: Props) {
           onAsideLgClose={() => setIsAsideLgActive(false)}
         />
         {children}
-        <FooterBar>
-          Get more with{` `}
-          <a
-            href="https://dashboard"
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-600"
-          >
-            Premium version
-          </a>
-        </FooterBar>
       </div>
     </div>
   )
