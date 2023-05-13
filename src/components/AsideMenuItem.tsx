@@ -59,7 +59,7 @@ const AsideMenuItem = ({ item, isDropdownList = false }: Props) => {
 
   const componentClass = [
     'flex cursor-pointer',
-    isDropdownList ? 'py-3 px-6 text-sm' : 'py-3',
+    isDropdownList ? 'py-3 pl-3 text-sm' : 'py-3',
     item.color
       ? getButtonColor(item.color, false, true)
       : `${asideMenuItemStyle} dark:text-slate-300 dark:hover:text-white`,

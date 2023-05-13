@@ -79,10 +79,6 @@ export default function SignIn() {
                   <Field name="password" type="password"/>
                 </FormField>
 
-                {/*<FormCheckRadio type="checkbox" label="Remember">*/}
-                {/*  <Field type="checkbox" name="remember" />*/}
-                {/*</FormCheckRadio>*/}
-
                 <BaseDivider/>
 
                 <BaseButtons>

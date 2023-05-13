@@ -10,7 +10,7 @@ import {
   mdiTelevisionGuide,
   mdiResponsive,
   mdiPalette,
-  mdiVuejs,
+  mdiVuejs, mdiCog, mdiFontAwesome, mdiEmoticon, mdiShape,
 } from '@mdi/js'
 import { MenuAsideItem } from './interfaces'
 
@@ -19,6 +19,39 @@ const menuAside: MenuAsideItem[] = [
     href: '/dashboard',
     icon: mdiMonitor,
     label: 'Dashboard',
+  },
+  {
+    label: 'Контент',
+    icon: mdiViewList,
+    menu: [
+      {
+        label: 'Категории',
+        icon: mdiShape,
+        href: '/content/categories'
+      },
+    ],
+  },
+  {
+    label: 'Настройки',
+    icon: mdiCog,
+    menu: [
+      {
+        label: 'Главные',
+        icon: mdiCog,
+        href: '/settings',
+      },
+      {
+        label: 'Справочники',
+        icon: mdiFontAwesome,
+        menu: [
+          {
+            label: 'Иконки',
+            icon: mdiEmoticon,
+            href: '/settings/digest/icons',
+          }
+        ]
+      },
+    ],
   },
   {
     href: '/tables',
