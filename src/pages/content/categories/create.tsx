@@ -7,17 +7,19 @@ import SectionTitleLineWithButton from "../../../components/SectionTitleLineWith
 import {mdiBallotOutline} from "@mdi/js";
 import BaseButton from "../../../components/BaseButton";
 import CardBox from "../../../components/CardBox";
-import {Field, Form, Formik, FormikHandlers, FormikHelpers, FormikValues} from "formik";
+import {Field, Form, Formik, FormikHelpers, FormikValues} from "formik";
 import FormField from "../../../components/FormField";
 import BaseDivider from "../../../components/BaseDivider";
 import BaseButtons from "../../../components/BaseButtons";
 import FormCheckRadioGroup from "../../../components/FormCheckRadioGroup";
 import FormCheckRadio from "../../../components/FormCheckRadio";
 import * as Yup from 'yup';
-import {error} from "next/dist/build/output/log";
+import {CreateCategory, createCategoryApi} from "../../../api/categories/CreateCategoryApi";
+import {useRouter} from "next/router";
 
 
 const CategoriesCreate = () => {
+  const router = useRouter();
   const initialValues = {
     name: '',
     slug: '',
@@ -33,9 +35,28 @@ const CategoriesCreate = () => {
     description: Yup.string().nullable(),
     active: Yup.boolean().nullable(),
   })
-  const submitHandler = (values: FormikValues, action: FormikHelpers<FormikValues>): void => {
+  const submitHandler = (values: CreateCategory, action: FormikHelpers<FormikValues>): void => {
+    createCategoryApi(values).then(res => {
+      if (res.errors) {
+        const formState = {
+          name: null,
+          slug: null,
+          icon: null,
+          description: null,
+          active: null,
+        }
 
+        if (res.errors.name) formState.name = res.errors.name.join('. ')
+        if (res.errors.slug) formState.slug = res.errors.slug.join('. ')
+        if (res.errors.icon) formState.icon = res.errors.icon.join('. ')
+        if (res.errors.description) formState.description = res.errors.description.join('. ')
+        if (res.errors.active) formState.active = res.errors.active.join('. ')
 
+        action.setErrors(formState)
+      } else {
+        router.push('/content/categories')
+      }
+    })
 
   }
 
