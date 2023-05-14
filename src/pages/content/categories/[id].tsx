@@ -3,7 +3,7 @@ import LayoutAuthenticated from "../../../layouts/Authenticated";
 import Head from "next/head";
 import {getPageTitle} from "../../../config";
 import SectionTitleLineWithButton from "../../../components/SectionTitleLineWithButton";
-import {mdiTableBorder, mdiPlus, mdiPencil, mdiTrashCan} from "@mdi/js";
+import {mdiTableBorder, mdiPlus, mdiPencil, mdiTrashCan, mdiFolderHome, mdiFolderHomeOutline} from "@mdi/js";
 import BaseButton from "../../../components/BaseButton";
 import CardBox from "../../../components/CardBox";
 import SectionMain from '../../../components/SectionMain'
@@ -13,6 +13,7 @@ import {useSelector} from "react-redux";
 import Link from "next/link";
 import BaseButtons from "../../../components/BaseButtons";
 import {useRouter} from "next/router";
+import BaseIcon from "../../../components/BaseIcon";
 
 const Categories = () => {
   const dispatch = useStoreDispatch();
@@ -72,6 +73,17 @@ const Categories = () => {
                     </tr>
                     </thead>
                     <tbody>
+                    <tr className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+                      <td className="whitespace-nowrap px-6 py-3 font-medium">...</td>
+                      <td className="whitespace-nowrap px-6 py-3 underline">
+                        <Link href={`/content/categories/${categoryData.meta.additional.parent || ''}`}>
+                          <BaseIcon path={mdiFolderHomeOutline} size={26}/>
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-3"></td>
+                      <td className="whitespace-nowrap px-6 py-3"></td>
+                      <td className="whitespace-nowrap px-6 py-3"></td>
+                    </tr>
                     {categoryData.data.map((catalog, key) => (
                       <tr className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
                           key={key}>

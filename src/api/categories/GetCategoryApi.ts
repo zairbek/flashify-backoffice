@@ -6,6 +6,10 @@ export type CategoryData = {
     total: number
     offset: number
     limit: number
+    additional?: {
+      parent?: string | null
+      current?: string | null
+    }
   }
 }
 

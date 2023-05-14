@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import LayoutAuthenticated from "../../../layouts/Authenticated";
 import Head from "next/head";
 import {getPageTitle} from "../../../config";
@@ -16,17 +16,15 @@ import BaseButtons from "../../../components/BaseButtons";
 const Categories = () => {
   const dispatch = useStoreDispatch();
   const categoryData = useSelector((state: RootState) => state.category)
+  const [pages, setPages] = useState<number>(0)
+  const [current, setCurrent] = useState<number>(0)
 
   useEffect(() => {
     dispatch(getCategoryAction({limit: 10})).then(res => {
-      console.log(res);
+      setPages(Math.ceil(res.payload.meta.total / res.payload.meta.limit))
+      setCurrent(Math.abs(res.payload.meta.offset / res.payload.meta.limit))
     })
   }, [])
-
-  const pagination = {
-    'pages': Math.ceil(categoryData.meta.total / categoryData.meta.limit),
-    'current': Math.abs(categoryData.meta.offset / categoryData.meta.limit),
-  }
 
   const setCurrentPage = (page: number) => {
     dispatch(getCategoryAction({limit: 10, offset: Math.ceil(page * 2 )})).then(res => {
@@ -100,18 +98,18 @@ const Categories = () => {
                   <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
                     <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
                       <BaseButtons>
-                        {Array(pagination.pages).fill(0).map((item, page) => (
+                        {Array(pages).fill(0).map((item, page) => (
                           <BaseButton
                             key={page}
-                            active={page === pagination.current}
+                            active={page === current}
                             label={page + 1}
-                            color={page === pagination.current ? 'lightDark' : 'whiteDark'}
+                            color={page === current ? 'lightDark' : 'whiteDark'}
                             small
                             onClick={() => setCurrentPage(page)}/>
                         ))}
                       </BaseButtons>
                       <small className="mt-6 md:mt-0">
-                        Page {pagination.current + 1} of {pagination.pages}
+                        Page {current + 1} of {pages}
                       </small>
                     </div>
                   </div>

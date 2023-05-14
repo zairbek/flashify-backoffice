@@ -17,6 +17,10 @@ type InitialStateType = {
     total: number
     offset: number
     limit: number
+    additional?: {
+      parent?: null | string
+      current?: null | string
+    }
   }
 }
 
@@ -25,7 +29,11 @@ const initialState: InitialStateType = {
   meta: {
     limit: 0,
     offset: 0,
-    total: 0
+    total: 0,
+    additional: {
+      parent: '',
+      current: '',
+    }
   }
 }
 
@@ -48,6 +56,8 @@ const CategoryStore = createSlice({
       state.meta.limit = action.payload.meta.limit
       state.meta.offset = action.payload.meta.offset
       state.meta.total = action.payload.meta.total
+      state.meta.additional.parent = action.payload.meta.additional.parent
+      state.meta.additional.current = action.payload.meta.additional.current
     })
   }
 })
