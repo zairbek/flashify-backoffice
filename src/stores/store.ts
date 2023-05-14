@@ -5,6 +5,7 @@ import authDataStore from "./auth/AuthDataStore";
 import userStore from "./user/UserStore";
 import {useDispatch} from "react-redux";
 import {createWrapper} from "next-redux-wrapper";
+import categoryStore from "./category/CategoryStore";
 
 
 export function makeStore() {
@@ -13,7 +14,8 @@ export function makeStore() {
       style: styleReducer,
       main: mainReducer,
       auth: authDataStore,
-      user: userStore
+      user: userStore,
+      category: categoryStore,
     },
     devTools: true,
   })

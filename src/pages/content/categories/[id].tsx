@@ -12,16 +12,19 @@ import {getCategoryAction} from "../../../stores/category/CategoryStore";
 import {useSelector} from "react-redux";
 import Link from "next/link";
 import BaseButtons from "../../../components/BaseButtons";
+import {useRouter} from "next/router";
 
 const Categories = () => {
   const dispatch = useStoreDispatch();
   const categoryData = useSelector((state: RootState) => state.category)
+  const router = useRouter()
 
   useEffect(() => {
-    dispatch(getCategoryAction({limit: 2})).then(res => {
+    dispatch(getCategoryAction({limit: 2, parentUuid: router.query.id})).then(res => {
       console.log(res);
     })
-  }, [])
+  }, [router.query.id])
+
 
   const pagination = {
     'pages': Math.ceil(categoryData.meta.total / categoryData.meta.limit),
@@ -29,13 +32,15 @@ const Categories = () => {
   }
 
   const setCurrentPage = (page: number) => {
-    dispatch(getCategoryAction({limit: 2, offset: Math.ceil(page * 2 )})).then(res => {
+    dispatch(getCategoryAction({limit: 2, offset: Math.ceil(page * 2 ), parentUuid: router.query.id})).then(res => {
       console.log(res);
     })
   }
 
+
   return (
     <>
+
       <Head>
         <title>{getPageTitle('Категории')}</title>
       </Head>
@@ -97,6 +102,7 @@ const Categories = () => {
                     </tbody>
                   </table>
 
+
                   <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
                     <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
                       <BaseButtons>
@@ -115,6 +121,7 @@ const Categories = () => {
                       </small>
                     </div>
                   </div>
+
 
                 </div>
               </div>
