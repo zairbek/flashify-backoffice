@@ -20,7 +20,7 @@ const Categories = () => {
   const router = useRouter()
 
   useEffect(() => {
-    dispatch(getCategoryAction({limit: 2, parentUuid: router.query.id})).then(res => {
+    dispatch(getCategoryAction({limit: 10, parentUuid: router.query.id})).then(res => {
       console.log(res);
     })
   }, [router.query.id])
@@ -32,7 +32,7 @@ const Categories = () => {
   }
 
   const setCurrentPage = (page: number) => {
-    dispatch(getCategoryAction({limit: 2, offset: Math.ceil(page * 2 ), parentUuid: router.query.id})).then(res => {
+    dispatch(getCategoryAction({limit: 10, offset: Math.ceil(page * 2 ), parentUuid: router.query.id})).then(res => {
       console.log(res);
     })
   }

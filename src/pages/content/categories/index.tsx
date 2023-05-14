@@ -18,7 +18,7 @@ const Categories = () => {
   const categoryData = useSelector((state: RootState) => state.category)
 
   useEffect(() => {
-    dispatch(getCategoryAction({limit: 2})).then(res => {
+    dispatch(getCategoryAction({limit: 10})).then(res => {
       console.log(res);
     })
   }, [])
@@ -29,7 +29,7 @@ const Categories = () => {
   }
 
   const setCurrentPage = (page: number) => {
-    dispatch(getCategoryAction({limit: 2, offset: Math.ceil(page * 2 )})).then(res => {
+    dispatch(getCategoryAction({limit: 10, offset: Math.ceil(page * 2 )})).then(res => {
       console.log(res);
     })
   }
