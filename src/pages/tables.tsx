@@ -10,6 +10,8 @@ import SectionMain from '../components/SectionMain'
 import SectionTitleLineWithButton from '../components/SectionTitleLineWithButton'
 import TableSampleClients from '../components/TableSampleClients'
 import { getPageTitle } from '../config'
+import {useAuth} from "../hooks/useAuth";
+import nookies from "nookies";
 
 const TablesPage = () => {
   return (
@@ -55,5 +57,26 @@ const TablesPage = () => {
 TablesPage.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
+export const getServerSideProps = async (context: { req, params }) => {
+  // useAuth(context)
 
+  const cookies = nookies.get(context)
+
+  if (! cookies.accessToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+      props: {}
+    };
+  }
+
+  console.log(cookies.accessToken)
+
+
+  return {
+    props: {}
+  }
+}
 export default TablesPage

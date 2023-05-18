@@ -3,11 +3,13 @@ import {StatusHTTP} from "./types";
 
 const headers = {
   'client-id': '99101220-b12a-41bc-8948-fbe3e6202e90',
-  'client-secret': 'qRaB75DqzY35cjIMvWaokbog8IhfHaXI7nBeqXIF'
+  'client-secret': 'qRaB75DqzY35cjIMvWaokbog8IhfHaXI7nBeqXIF',
+  "Content-type": "application/json",
 }
 
 export const instance = axios.create({
   baseURL: 'http://market.loc/api/backoffice/v1',
+  withCredentials: true,
   headers: headers
 })
 
@@ -16,7 +18,9 @@ instance.interceptors.response.use((response): AxiosResponse => {
 }, (error: AxiosError) => {
   if (error.response.status === 404) throw new Error(`${StatusHTTP.NOT_FOUND}`);
   if (error.response.status === 403) throw new Error(`${StatusHTTP.FORBIDDEN}`);
-  if (error.response.status === 401) throw new Error(String(error.response.status))
+  if (error.response.status === 401) {
+
+  }
   if (error.response.status === 422) {
     return {
       success: false,

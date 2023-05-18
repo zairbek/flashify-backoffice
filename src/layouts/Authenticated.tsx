@@ -23,15 +23,15 @@ export default function LayoutAuthenticated({ children }: Props) {
   const dispatch = useAppDispatch()
   const userUuid = useSelector((state) => state.user.uuid);
 
-  useGetUserData()
+  // useGetUserData()
 
-  useEffect(() => {
-    if (userUuid !== null) {
-      router.push('/dashboard')
-    } else {
-      router.push('/')
-    }
-  }, [userUuid])
+  // useEffect(() => {
+  //   if (userUuid !== null) {
+  //     router.push('/dashboard')
+  //   } else {
+  //     router.push('/')
+  //   }
+  // }, [userUuid])
 
 
 

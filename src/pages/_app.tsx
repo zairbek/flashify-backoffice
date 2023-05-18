@@ -4,9 +4,10 @@ import type { AppProps } from 'next/app'
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import {store, wrapper} from '../stores/store'
+import {makeStore} from '../stores/store'
 import { Provider } from 'react-redux'
 import '../css/main.css'
+import {createWrapper} from "next-redux-wrapper";
 
 export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -33,7 +34,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const imageHeight = '960'
 
   return (
-    <Provider store={store}>
+    <Provider store={makeStore()}>
       {getLayout(
         <>
           <Head>
@@ -78,6 +79,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     </Provider>
   )
 }
+
+const wrapper = createWrapper(makeStore)
 
 
 MyApp.getInitialProps = wrapper.getInitialAppProps(

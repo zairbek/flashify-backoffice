@@ -1,5 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getCategoryApi, GetCategoryParams} from "../../api/categories/GetCategoryApi";
+import {showCategoryApi} from "../../api/categories/ShowCategoryApi";
+import {stat} from "fs";
 
 type CatalogType = {
   uuid: string
@@ -12,6 +14,8 @@ type CatalogType = {
 }
 
 type InitialStateType = {
+  current: null | object,
+
   data: [CatalogType?]
   meta: {
     total: number
@@ -25,6 +29,7 @@ type InitialStateType = {
 }
 
 const initialState: InitialStateType = {
+  current: null,
   data: [],
   meta: {
     limit: 0,
@@ -44,6 +49,13 @@ export const getCategoryAction = createAsyncThunk(
   }
 )
 
+export const showCategoryAction = createAsyncThunk(
+  'showCategoryAction',
+  async (uuid: string) => {
+    return await showCategoryApi(uuid)
+  }
+)
+
 const CategoryStore = createSlice({
   name: 'category',
   initialState: initialState,
@@ -58,6 +70,9 @@ const CategoryStore = createSlice({
       state.meta.total = action.payload.meta.total
       state.meta.additional.parent = action.payload.meta.additional.parent
       state.meta.additional.current = action.payload.meta.additional.current
+    })
+    builder.addCase(showCategoryAction.fulfilled, (state, action) => {
+      state.current = action.payload
     })
   }
 })

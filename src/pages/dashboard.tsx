@@ -8,7 +8,7 @@ import {
   mdiReload,
 } from '@mdi/js'
 import Head from 'next/head'
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import type { ReactElement } from 'react'
 import BaseButton from '../components/BaseButton'
 import LayoutAuthenticated from '../layouts/Authenticated'
@@ -26,8 +26,16 @@ import ChartLineSample from '../components/ChartLineSample'
 import NotificationBar from '../components/NotificationBar'
 import TableSampleClients from '../components/TableSampleClients'
 import { getPageTitle } from '../config'
+import {useAuth} from "../hooks/useAuth";
+import {wrapper} from "../stores/store";
+import {setUser} from "../stores/user/UserStore";
+import {useAppDispatch} from "../stores/hooks";
 
-const Dashboard = () => {
+const Dashboard = ({user}) => {
+  const dispatch = useAppDispatch()
+  dispatch(setUser(user))
+
+
   const { clients } = useSampleClients()
   const { transactions } = useSampleTransactions()
 
@@ -131,5 +139,23 @@ const Dashboard = () => {
 Dashboard.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  try {
+    const user = await useAuth(context, store)
+    return {
+      props: {
+        user
+      }
+    }
+  } catch (e) {
+    return {
+      redirect: {
+        destination: `/`,
+        permanent: false,
+      }
+    }
+  }
+})
 
 export default Dashboard

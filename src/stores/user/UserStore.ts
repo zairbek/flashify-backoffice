@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getMeApi} from "../../api/user/Me/GetMeApi";
 
-type InitialStateType = {
+export type UserStateType = {
     uuid: string;
     email: string;
     firstName?: string;
@@ -10,7 +10,7 @@ type InitialStateType = {
     status: string;
 }
 
-const initialState: InitialStateType = {
+const initialState: UserStateType = {
     uuid: null,
     email: null,
     firstName: null,
@@ -30,7 +30,14 @@ const UserStore = createSlice({
     name: 'user',
     initialState,
     reducers: {
-
+      setUser: (state, action) => {
+        state.uuid = action.payload.uuid
+        state.email = action.payload.email
+        state.firstName = action.payload.name.firstName
+        state.lastName = action.payload.name.lastName
+        state.sex = action.payload.sex
+        state.status = action.payload.status
+      }
     },
     extraReducers: (builder) => {
       builder.addCase(getMeAction.fulfilled, (state, action) => {
@@ -44,4 +51,5 @@ const UserStore = createSlice({
     }
 })
 
+export const {setUser} = UserStore.actions
 export default UserStore.reducer

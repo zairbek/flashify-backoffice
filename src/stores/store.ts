@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import {applyMiddleware, combineReducers, configureStore} from '@reduxjs/toolkit'
 import styleReducer from './styleSlice'
 import mainReducer from './mainSlice'
 import authDataStore from "./auth/AuthDataStore";
@@ -17,7 +17,7 @@ export function makeStore() {
       user: userStore,
       category: categoryStore,
     },
-    devTools: true,
+    devTools: process.env.NODE_ENV === 'development',
   })
 }
 
@@ -29,4 +29,6 @@ export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
 export const useStoreDispatch = () => useDispatch<typeof store.dispatch>()
-export const wrapper = createWrapper<RootStore>(makeStore);
+export const wrapper = createWrapper<RootStore>(makeStore, {
+  debug: process.env.NODE_ENV === 'development'
+});

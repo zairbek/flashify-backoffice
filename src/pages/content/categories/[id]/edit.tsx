@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import LayoutAuthenticated from "../../../../layouts/Authenticated";
 import Head from "next/head";
 import {getPageTitle} from "../../../../config";
@@ -16,10 +16,19 @@ import FormCheckRadio from "../../../../components/FormCheckRadio";
 import * as Yup from 'yup';
 import {CreateCategory, createCategoryApi} from "../../../../api/categories/CreateCategoryApi";
 import {useRouter} from "next/router";
+import {useAppDispatch} from "../../../../stores/hooks";
+import {showCategoryAction} from "../../../../stores/category/CategoryStore";
+import {showCategoryApi} from "../../../../api/categories/ShowCategoryApi";
+import {router} from "next/client";
+import {GetServerSidePropsContext} from "next";
 
 
-const CategoriesEdit = () => {
+const CategoriesEdit = ({data}) => {
+  console.log(data)
+
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const initialValues = {
     name: '',
     slug: '',
@@ -147,4 +156,11 @@ CategoriesEdit.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
 
+export async function getServerSideProps ({params}): Promise {
+  const data = await showCategoryApi(params.id)
+
+  return {
+    props: {data}
+  }
+}
 export default CategoriesEdit;

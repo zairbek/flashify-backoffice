@@ -10,15 +10,18 @@ import FormField from '../components/FormField'
 import BaseDivider from '../components/BaseDivider'
 import BaseButtons from '../components/BaseButtons'
 import {getPageTitle} from '../config'
-import {useStoreDispatch} from "../stores/store";
+import {useStoreDispatch, wrapper} from "../stores/store";
 import {authorization} from "../stores/auth/AuthDataStore";
 import * as Yup from 'yup';
-import {SignInError, Token} from "../api/auth/types";
+import {SignInError} from "../api/auth/types";
 import {ValidationErrors} from "../api/root/types";
 import {getMeAction} from "../stores/user/UserStore";
+import {useAuth} from "../hooks/useAuth";
+import {useRouter} from "next/router";
 
 export default function SignIn() {
   const dispatch = useStoreDispatch()
+  const router = useRouter();
 
   const signInSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -39,9 +42,8 @@ export default function SignIn() {
         if (errors.errors.password) state.password = errors.errors.password.join('. ')
         action.setErrors(state)
       } else {
-        const token = res.payload as Token
-        localStorage.setItem('token', JSON.stringify(token));
-        dispatch(getMeAction({accessToken: token.accessToken}))
+        dispatch(getMeAction({accessToken: res.payload.accessToken}))
+        router.push('/dashboard')
       }
     })
   }
@@ -98,10 +100,18 @@ SignIn.getLayout = function getLayout(page: ReactElement) {
   return <LayoutGuest>{page}</LayoutGuest>
 }
 
-export const getServerSideProps = async ({ req, params }) => {
-  return {
-    props: {
-      data: {}
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  try {
+    await useAuth(context, store)
+    return {
+      redirect: {
+        destination: `/dashboard`,
+        permanent: false,
+      }
+    }
+  } catch (e) {
+    return {
+      props: {}
     }
   }
-}
+})

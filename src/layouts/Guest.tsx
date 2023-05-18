@@ -12,15 +12,15 @@ export default function LayoutGuest({ children }: Props) {
   const dispatch = useAppDispatch()
   const userUuid = useSelector((state) => state.user.uuid);
   const router = useRouter()
-  useGetUserData()
+  // useGetUserData()
 
-  useEffect(() => {
-    if (userUuid !== null) {
-      router.push('/dashboard')
-    } else {
-      router.push('/')
-    }
-  }, [userUuid])
+  // useEffect(() => {
+  //   if (userUuid !== null) {
+  //     router.push('/dashboard')
+  //   } else {
+  //     router.push('/')
+  //   }
+  // }, [userUuid])
 
 
   const darkMode = useAppSelector((state) => state.style.darkMode)
