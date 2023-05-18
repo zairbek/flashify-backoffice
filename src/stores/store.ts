@@ -30,5 +30,5 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 export const useStoreDispatch = () => useDispatch<typeof store.dispatch>()
 export const wrapper = createWrapper<RootStore>(makeStore, {
-  debug: process.env.NODE_ENV === 'development'
+  // debug: process.env.NODE_ENV === 'development'
 });
