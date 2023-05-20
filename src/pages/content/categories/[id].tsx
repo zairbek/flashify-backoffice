@@ -14,6 +14,8 @@ import Link from "next/link";
 import BaseButtons from "../../../components/BaseButtons";
 import {useRouter} from "next/router";
 import BaseIcon from "../../../components/BaseIcon";
+import {Category} from "../../../api/categories/GetCategoryApi";
+import {deleteCategoryApi} from "../../../api/categories/DeleteCategoryApi";
 
 const Categories = () => {
   const dispatch = useStoreDispatch();
@@ -24,8 +26,7 @@ const Categories = () => {
   const {limit, total, offset} = categoryData.meta
 
   useEffect(() => {
-    dispatch(getCategoryAction({limit: 10, parentUuid: router.query.id})).then(res => {
-    })
+    dispatch(getCategoryAction({limit: 10, parentUuid: router.query.id}))
   }, [router.query.id])
 
   useEffect(() => {
@@ -34,9 +35,16 @@ const Categories = () => {
   }, [limit, total, offset])
 
   const setCurrentPage = (page: number) => {
-    dispatch(getCategoryAction({limit: 10, offset: Math.ceil(page * 2 ), parentUuid: router.query.id})).then(res => {
-      console.log(res);
-    })
+    dispatch(getCategoryAction({limit: 10, offset: Math.ceil(page * 2 ), parentUuid: router.query.id}))
+  }
+
+  const deleteCatalog = (category: Category) => {
+    const agree = window.confirm(`Вы действительно хотите удалить ${category.name}?`)
+    if (agree) {
+      deleteCategoryApi(category.uuid).then(res => {
+        dispatch(getCategoryAction({limit: 10, parentUuid: router.query.id}))
+      })
+    }
   }
 
   return (
@@ -101,7 +109,7 @@ const Categories = () => {
                               small
                             />
                             <BaseButton
-                              href="/content/categories/create"
+                              onClick={() => deleteCatalog(catalog)}
                               icon={mdiTrashCan}
                               color="danger"
                               small
