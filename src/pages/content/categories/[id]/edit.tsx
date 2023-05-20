@@ -14,14 +14,16 @@ import BaseButtons from "../../../../components/BaseButtons";
 import FormCheckRadioGroup from "../../../../components/FormCheckRadioGroup";
 import FormCheckRadio from "../../../../components/FormCheckRadio";
 import * as Yup from 'yup';
-import {CreateCategory, createCategoryApi} from "../../../../api/categories/CreateCategoryApi";
 import {useRouter} from "next/router";
 import {parseCookies} from "nookies";
 import {wrapper} from "../../../../stores/store";
 import {showCategoryApi} from "../../../../api/categories/ShowCategoryApi";
+import {UpdateCategory, updateCategoryApi} from "../../../../api/categories/UpdateCategoryApi";
 
 
 const CategoriesEdit = ({data}) => {
+  console.log(data)
+
   const router = useRouter();
   const initialValues = {
     name: data.name,
@@ -29,6 +31,7 @@ const CategoriesEdit = ({data}) => {
     icon: data.icon,
     description: data.description,
     active: data.active,
+    parentCategory: data.parentCategory?.uuid,
   }
 
   const categoryCreateSchema = Yup.object().shape({
@@ -37,9 +40,10 @@ const CategoriesEdit = ({data}) => {
     icon: Yup.string().nullable(),
     description: Yup.string().nullable(),
     active: Yup.boolean().nullable(),
+    parentCategory: Yup.string().nullable(),
   })
-  const submitHandler = (values: CreateCategory, action: FormikHelpers<FormikValues>): void => {
-    updateCa(values).then(res => {
+  const submitHandler = (values: UpdateCategory, action: FormikHelpers<FormikValues>): void => {
+    updateCategoryApi(router.query.id, values).then(res => {
       if (res.errors) {
         const formState = {
           name: null,
@@ -47,6 +51,7 @@ const CategoriesEdit = ({data}) => {
           icon: null,
           description: null,
           active: null,
+          parentCategory: null,
         }
 
         if (res.errors.name) formState.name = res.errors.name.join('. ')
@@ -54,6 +59,7 @@ const CategoriesEdit = ({data}) => {
         if (res.errors.icon) formState.icon = res.errors.icon.join('. ')
         if (res.errors.description) formState.description = res.errors.description.join('. ')
         if (res.errors.active) formState.active = res.errors.active.join('. ')
+        if (res.errors.parentCategory) formState.active = res.errors.active.join('. ')
 
         action.setErrors(formState)
       } else {
@@ -80,6 +86,7 @@ const CategoriesEdit = ({data}) => {
           >
             {({errors, touched}) => (
               <Form>
+                <Field name="parentCategory" type="hidden"/>
                 <FormField label="Название"
                            help={(errors.name && touched.name) || (errors.slug && touched.slug)
                              ? errors.name || errors.slug
@@ -158,6 +165,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ctx 
     icon: null,
     description: null,
     active: null,
+    parentCategory: null,
   }
   await showCategoryApi(ctx.query.id, accessToken).then(res => {
     data.name = res.name
@@ -165,6 +173,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ctx 
     data.icon = res.icon
     data.description = res.description
     data.active = res.isActive
+    data.parentCategory = res.parentCategory
   })
 
   return {

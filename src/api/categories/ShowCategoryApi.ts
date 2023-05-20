@@ -1,5 +1,4 @@
 import {axiosInstance} from "../root";
-import {authorization} from "../../stores/auth/AuthDataStore";
 
 export type ShowCategory = {
   uuid: string
@@ -8,6 +7,7 @@ export type ShowCategory = {
   description?: null | string
   icon?: null | string
   isActive:  boolean
+  parentCategory:  null | ShowCategory
 }
 
 export const showCategoryApi = async (uuid: string, token?: string = null): Promise<ShowCategory> => {
