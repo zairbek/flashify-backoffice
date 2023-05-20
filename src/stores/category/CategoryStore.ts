@@ -51,8 +51,8 @@ export const getCategoryAction = createAsyncThunk(
 
 export const showCategoryAction = createAsyncThunk(
   'showCategoryAction',
-  async (uuid: string) => {
-    return await showCategoryApi(uuid)
+  async (uuid: string, token?: string = null) => {
+    return await showCategoryApi(uuid, token)
   }
 )
 

@@ -54,7 +54,7 @@ const CategoriesCreate = () => {
 
         action.setErrors(formState)
       } else {
-        router.push('/content/categories')
+        router.back()
       }
     })
 
@@ -130,7 +130,7 @@ const CategoriesCreate = () => {
 
                 <BaseButtons>
                   <BaseButton type="submit" color="info" label="Сохранить" />
-                  <BaseButton href="/content/categories" color="info" outline label="Отменить" />
+                  <BaseButton onClick={() => router.back()} color="info" outline label="Отменить" />
                   <BaseButton type="reset" color="warning" outline label="Reset" />
                 </BaseButtons>
               </Form>

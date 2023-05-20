@@ -16,25 +16,19 @@ import FormCheckRadio from "../../../../components/FormCheckRadio";
 import * as Yup from 'yup';
 import {CreateCategory, createCategoryApi} from "../../../../api/categories/CreateCategoryApi";
 import {useRouter} from "next/router";
-import {useAppDispatch} from "../../../../stores/hooks";
-import {showCategoryAction} from "../../../../stores/category/CategoryStore";
+import {parseCookies} from "nookies";
+import {wrapper} from "../../../../stores/store";
 import {showCategoryApi} from "../../../../api/categories/ShowCategoryApi";
-import {router} from "next/client";
-import {GetServerSidePropsContext} from "next";
 
 
 const CategoriesEdit = ({data}) => {
-  console.log(data)
-
   const router = useRouter();
-  const dispatch = useAppDispatch();
-
   const initialValues = {
-    name: '',
-    slug: '',
-    icon: '',
-    description: '',
-    active: false
+    name: data.name,
+    slug: data.slug,
+    icon: data.icon,
+    description: data.description,
+    active: data.active,
   }
 
   const categoryCreateSchema = Yup.object().shape({
@@ -45,7 +39,7 @@ const CategoriesEdit = ({data}) => {
     active: Yup.boolean().nullable(),
   })
   const submitHandler = (values: CreateCategory, action: FormikHelpers<FormikValues>): void => {
-    createCategoryApi(values).then(res => {
+    updateCa(values).then(res => {
       if (res.errors) {
         const formState = {
           name: null,
@@ -63,7 +57,7 @@ const CategoriesEdit = ({data}) => {
 
         action.setErrors(formState)
       } else {
-        router.push('/content/categories')
+        router.back()
       }
     })
 
@@ -76,7 +70,7 @@ const CategoriesEdit = ({data}) => {
       </Head>
 
       <SectionMain>
-        <SectionTitleLineWithButton icon={mdiBallotOutline} title="Создание категории" main/>
+        <SectionTitleLineWithButton icon={mdiBallotOutline} title="Редактирование категории" main/>
 
         <CardBox>
           <Formik
@@ -139,7 +133,7 @@ const CategoriesEdit = ({data}) => {
 
                 <BaseButtons>
                   <BaseButton type="submit" color="info" label="Сохранить" />
-                  <BaseButton href="/content/categories" color="info" outline label="Отменить" />
+                  <BaseButton onClick={() => router.back()} color="info" outline label="Отменить" />
                   <BaseButton type="reset" color="warning" outline label="Reset" />
                 </BaseButtons>
               </Form>
@@ -156,11 +150,28 @@ CategoriesEdit.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
 
-export async function getServerSideProps ({params}): Promise {
-  const data = await showCategoryApi(params.id)
+export const getServerSideProps = wrapper.getServerSideProps(store => async ctx => {
+  const {accessToken} = parseCookies(ctx)
+  const data = {
+    name: null,
+    slug: null,
+    icon: null,
+    description: null,
+    active: null,
+  }
+  await showCategoryApi(ctx.query.id, accessToken).then(res => {
+    data.name = res.name
+    data.slug = res.slug
+    data.icon = res.icon
+    data.description = res.description
+    data.active = res.isActive
+  })
 
   return {
-    props: {data}
+    props: {
+      data
+    }
   }
-}
+});
+
 export default CategoriesEdit;

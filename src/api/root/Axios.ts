@@ -1,5 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {StatusHTTP} from "./types";
+import {parseCookies} from "nookies";
 
 const headers = {
   'client-id': '99101220-b12a-41bc-8948-fbe3e6202e90',
@@ -11,6 +12,14 @@ export const instance = axios.create({
   baseURL: 'http://market.loc/api/backoffice/v1',
   withCredentials: true,
   headers: headers
+})
+
+instance.interceptors.request.use(async (config) => {
+  const {accessToken} = parseCookies();
+  if (accessToken) {
+    config.headers.setAuthorization(`Bearer ${accessToken}`)
+  }
+  return config
 })
 
 instance.interceptors.response.use((response): AxiosResponse => {
