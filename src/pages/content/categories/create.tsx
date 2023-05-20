@@ -25,6 +25,7 @@ const CategoriesCreate = () => {
     slug: '',
     icon: '',
     description: '',
+    parentCategory: router.query.p || '',
     active: false
   }
 
@@ -77,6 +78,7 @@ const CategoriesCreate = () => {
           >
             {({errors, touched}) => (
               <Form>
+                <Field name="parentCategory" type="hidden"/>
                 <FormField label="Название"
                            help={(errors.name && touched.name) || (errors.slug && touched.slug)
                              ? errors.name || errors.slug

@@ -48,7 +48,7 @@ const Categories = () => {
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiTableBorder} title="Категории" main>
           <BaseButton
-            href='/content/categories/create'
+            href={`/content/categories/create?p=${router.query.id}`}
             icon={mdiPlus}
             label="Добавить"
             color="contrast"
