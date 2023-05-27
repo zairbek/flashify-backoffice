@@ -82,7 +82,7 @@ const IconsIndex = () => {
                           key={key}>
                         <td className="whitespace-nowrap px-6 py-4 font-medium">{key + 1}</td>
                         <td className="whitespace-nowrap px-6 py-4 underline">
-                          <Link href={`/settings/digest/icons/${icon.uuid}`}>{icon.name}</Link>
+                          <Link href={`/settings/digest/icons/${icon.uuid}/edit`}>{icon.name}</Link>
                         </td>
                         <td className="whitespace-nowrap px-6 py-1">
                           <Image src={icon.file} alt={icon.name} width={50} height={50}/>
