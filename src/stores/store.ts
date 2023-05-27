@@ -1,4 +1,4 @@
-import {applyMiddleware, combineReducers, configureStore} from '@reduxjs/toolkit'
+import {configureStore} from '@reduxjs/toolkit'
 import styleReducer from './styleSlice'
 import mainReducer from './mainSlice'
 import authDataStore from "./auth/AuthDataStore";
@@ -6,6 +6,7 @@ import userStore from "./user/UserStore";
 import {useDispatch} from "react-redux";
 import {createWrapper} from "next-redux-wrapper";
 import categoryStore from "./category/CategoryStore";
+import iconStore from "./icon/IconStore";
 
 
 export function makeStore() {
@@ -16,6 +17,7 @@ export function makeStore() {
       auth: authDataStore,
       user: userStore,
       category: categoryStore,
+      icon: iconStore,
     },
     devTools: process.env.NODE_ENV === 'development',
   })

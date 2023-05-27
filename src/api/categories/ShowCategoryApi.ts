@@ -10,7 +10,7 @@ export type ShowCategory = {
   parentCategory:  null | ShowCategory
 }
 
-export const showCategoryApi = async (uuid: string, token?: string = null): Promise<ShowCategory> => {
+export const showCategoryApi = async (uuid: string, token: string): Promise<ShowCategory> => {
   const response = await axiosInstance.get(`/categories/${uuid}`, {
     headers: {
       authorization: `Bearer ${token}`

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ColorButtonKey } from '../interfaces'
 import BaseButton from './BaseButton'
+import {useField} from "formik";
 
 type Props = {
   label?: string
@@ -8,13 +9,15 @@ type Props = {
   accept?: string
   color: ColorButtonKey
   isRoundIcon?: boolean
+  name: string
+  setFieldValue: any
 }
 
-const FormFilePicker = ({ label, icon, accept, color, isRoundIcon }: Props) => {
+const FormFilePicker = ({ label, icon, accept, color, isRoundIcon, name, setFieldValue }: Props) => {
   const [file, setFile] = useState(null)
-
   const handleFileChange = (event) => {
     setFile(event.currentTarget.files[0])
+    setFieldValue(name, event.currentTarget.files[0])
   }
 
   const showFilename = !isRoundIcon && file
