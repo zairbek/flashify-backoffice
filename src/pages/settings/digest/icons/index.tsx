@@ -13,6 +13,8 @@ import {RootState, useStoreDispatch} from "../../../../stores/store";
 import {useSelector} from "react-redux";
 import {getIconAction} from "../../../../stores/icon/IconStore";
 import Image from "next/image";
+import {deleteIconApi} from "../../../../api/icons/DeleteIconApi";
+import {Icon} from "../../../../api/icons/GetIconApi";
 
 const IconsIndex = () => {
   const dispatch = useStoreDispatch();
@@ -34,14 +36,14 @@ const IconsIndex = () => {
     })
   }
 
-  // const deleteCatalog = (category: Category) => {
-  //   const agree = window.confirm(`Вы действительно хотите удалить ${category.name}?`)
-  //   if (agree) {
-  //     deleteCategoryApi(category.uuid).then(res => {
-  //       dispatch(getCategoryAction({limit: 10}))
-  //     })
-  //   }
-  // }
+  const deleteCatalog = (icon: Icon) => {
+    const agree = window.confirm(`Вы действительно хотите удалить ${icon.name}?`)
+    if (agree) {
+      deleteIconApi(icon.uuid).then(res => {
+        dispatch(getIconAction({limit: 10}))
+      })
+    }
+  }
 
   return (
     <>
