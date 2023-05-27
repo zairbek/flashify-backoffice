@@ -18,6 +18,7 @@ import {wrapper} from "../../../../../stores/store";
 import {showIconApi} from "../../../../../api/icons/ShowIconApi";
 import FormFilePicker from "../../../../../components/FormFilePicker";
 import {UpdateIcon, updateIconApi} from "../../../../../api/icons/UpdateIconApi";
+import Image from "next/image";
 
 
 const IconsEdit = ({data}) => {
@@ -101,13 +102,16 @@ const IconsEdit = ({data}) => {
                   <Field name="name"/>
                 </FormField>
 
-                <FormField
-                  help={(errors.file && touched.file)
-                    ? errors.file
-                    : null}
-                >
-                  <FormFilePicker name="file" label="Upload" color="info" icon={mdiUpload} setFieldValue={setFieldValue} />
-                </FormField>
+                <div className="flex items-center gap-6">
+                  <Image src={data.file} alt={data.name} width={50} height={50}/>
+                  <FormField
+                    help={(errors.file && touched.file)
+                      ? errors.file
+                      : null}
+                  >
+                    <FormFilePicker name="file" label="Upload" color="info" icon={mdiUpload} setFieldValue={setFieldValue} />
+                  </FormField>
+                </div>
 
                 <BaseDivider />
 
