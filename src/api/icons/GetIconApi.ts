@@ -24,10 +24,15 @@ export type GetIconParams = {
   sortDirection?: null | string
 }
 
-export const getIconApi = async (params: GetIconParams): Promise<IconData> => {
+export const getIconApi = async (params: GetIconParams, token = null): Promise<IconData> => {
   let queryParams: string = new URLSearchParams(params).toString()
   queryParams = queryParams ? `?${queryParams}` : '';
 
-  const response = await axiosInstance.get(`/digest/icons${queryParams}`)
+  let configs = {}
+  if (token) {
+    configs = {headers: {authorization: `Bearer ${token}`}}
+  }
+
+  const response = await axiosInstance.get(`/digest/icons${queryParams}`, configs)
   return response.data
 }

@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import LayoutAuthenticated from "../../../layouts/Authenticated";
 import Head from "next/head";
 import {getPageTitle} from "../../../config";
@@ -16,10 +16,20 @@ import FormCheckRadio from "../../../components/FormCheckRadio";
 import * as Yup from 'yup';
 import {CreateCategory, createCategoryApi} from "../../../api/categories/CreateCategoryApi";
 import {useRouter} from "next/router";
+import {useSelector} from "react-redux";
+import {useStoreDispatch} from "../../../stores/store";
+import {getIconAction} from "../../../stores/icon/IconStore";
 
 
 const CategoriesCreate = () => {
   const router = useRouter();
+  const dispatch = useStoreDispatch();
+  const icons = useSelector(state => state.icon.data)
+
+  useEffect(() => {
+    dispatch(getIconAction({limit: 9999}))
+  }, [])
+
   const initialValues = {
     name: '',
     slug: '',
@@ -58,7 +68,6 @@ const CategoriesCreate = () => {
         router.back()
       }
     })
-
   }
 
   return (
@@ -87,7 +96,6 @@ const CategoriesCreate = () => {
                   <Field name="name"/>
                   <Field name="slug" placeholder="Slug"/>
                 </FormField>
-
                 <FormField label="Иконки"
                            labelFor="icon"
                            help={errors.icon && touched.icon
@@ -97,9 +105,9 @@ const CategoriesCreate = () => {
                 >
                   <Field name="icon" id="icon" component="select">
                     <option defaultChecked>Выбрать</option>
-                    <option value="red">Red</option>
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
+                    {icons.map((icon, key) => (
+                      <option value={icon.uuid} key={key}>{icon.name}</option>
+                    ))}
                   </Field>
                 </FormField>
                 <BaseDivider />

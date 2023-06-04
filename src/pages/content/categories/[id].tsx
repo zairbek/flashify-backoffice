@@ -16,6 +16,7 @@ import {useRouter} from "next/router";
 import BaseIcon from "../../../components/BaseIcon";
 import {Category} from "../../../api/categories/GetCategoryApi";
 import {deleteCategoryApi} from "../../../api/categories/DeleteCategoryApi";
+import Image from "next/image";
 
 const Categories = () => {
   const dispatch = useStoreDispatch();
@@ -99,7 +100,9 @@ const Categories = () => {
                           <Link href={`/content/categories/${catalog.uuid}`}>{catalog.name}</Link>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">{catalog.slug}</td>
-                        <td className="whitespace-nowrap px-6 py-4">{catalog.icon}</td>
+                        <td className="whitespace-nowrap px-6 py-1">
+                          {catalog.icon ? (<Image src={catalog.icon.file} alt={catalog.icon.name} width={50} height={50}/>) : ''}
+                        </td>
                         <td className="whitespace-nowrap px-6 py-4">
                           <BaseButtons>
                             <BaseButton

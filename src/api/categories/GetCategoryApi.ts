@@ -20,7 +20,11 @@ export type Category = {
   description: null | string
   parentCategory: null | string,
   isActive: boolean,
-  icon: null | string
+  icon?: {
+    uuid: string
+    name: string
+    file: string
+  }
 }
 
 export type GetCategoryParams = {

@@ -19,16 +19,15 @@ import {parseCookies} from "nookies";
 import {wrapper} from "../../../../stores/store";
 import {showCategoryApi} from "../../../../api/categories/ShowCategoryApi";
 import {UpdateCategory, updateCategoryApi} from "../../../../api/categories/UpdateCategoryApi";
+import {connect} from "react-redux";
+import {getIconApi} from "../../../../api/icons/GetIconApi";
 
-
-const CategoriesEdit = ({data}) => {
-  console.log(data)
-
+const CategoriesEdit = ({data, icons}) => {
   const router = useRouter();
   const initialValues = {
     name: data.name,
     slug: data.slug,
-    icon: data.icon,
+    icon_uuid: data.icon_uuid,
     description: data.description,
     active: data.active,
     parentCategory: data.parentCategory?.uuid,
@@ -48,7 +47,7 @@ const CategoriesEdit = ({data}) => {
         const formState = {
           name: null,
           slug: null,
-          icon: null,
+          icon_uuid: null,
           description: null,
           active: null,
           parentCategory: null,
@@ -56,7 +55,7 @@ const CategoriesEdit = ({data}) => {
 
         if (res.errors.name) formState.name = res.errors.name.join('. ')
         if (res.errors.slug) formState.slug = res.errors.slug.join('. ')
-        if (res.errors.icon) formState.icon = res.errors.icon.join('. ')
+        if (res.errors.icon_uuid) formState.icon_uuid = res.errors.icon_uuid.join('. ')
         if (res.errors.description) formState.description = res.errors.description.join('. ')
         if (res.errors.active) formState.active = res.errors.active.join('. ')
         if (res.errors.parentCategory) formState.active = res.errors.active.join('. ')
@@ -97,17 +96,17 @@ const CategoriesEdit = ({data}) => {
                 </FormField>
 
                 <FormField label="Иконки"
-                           labelFor="icon"
-                           help={errors.icon && touched.icon
-                             ? errors.icon
+                           labelFor="icon_uuid"
+                           help={errors.icon_uuid && touched.icon_uuid
+                             ? errors.icon_uuid
                              : null
                            }
                 >
-                  <Field name="icon" id="icon" component="select">
+                  <Field name="icon_uuid" id="icon_uuid" component="select">
                     <option defaultChecked>Выбрать</option>
-                    <option value="red">Red</option>
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
+                    {icons.map((icon, key) => (
+                      <option value={icon.uuid} key={key}>{icon.name}</option>
+                    ))}
                   </Field>
                 </FormField>
                 <BaseDivider />
@@ -162,7 +161,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ctx 
   const data = {
     name: null,
     slug: null,
-    icon: null,
+    icon_uuid: null,
     description: null,
     active: null,
     parentCategory: null,
@@ -170,17 +169,24 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ctx 
   await showCategoryApi(ctx.query.id, accessToken).then(res => {
     data.name = res.name
     data.slug = res.slug
-    data.icon = res.icon
+    data.icon_uuid = res.icon_uuid
     data.description = res.description
     data.active = res.isActive
     data.parentCategory = res.parentCategory
   })
 
+
+  let icons = []
+  await getIconApi({limit: 9999}, accessToken).then(res => {
+    icons = res.data
+  })
+
   return {
     props: {
-      data
+      data,
+      icons
     }
   }
 });
 
-export default CategoriesEdit;
+export default connect(state => state)(CategoriesEdit);

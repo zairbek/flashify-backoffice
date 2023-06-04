@@ -5,7 +5,7 @@ export type ShowCategory = {
   name: string
   slug: string
   description?: null | string
-  icon?: null | string
+  icon_uuid?: null | string
   isActive:  boolean
   parentCategory:  null | ShowCategory
 }

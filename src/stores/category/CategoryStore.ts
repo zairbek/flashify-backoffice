@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getCategoryApi, GetCategoryParams} from "../../api/categories/GetCategoryApi";
 import {showCategoryApi} from "../../api/categories/ShowCategoryApi";
-import {stat} from "fs";
 
 type CatalogType = {
   uuid: string
@@ -10,7 +9,11 @@ type CatalogType = {
   description: null | string
   parentCategory: null | string,
   isActive: boolean,
-  icon: null | string
+  icon?: {
+    uuid; string
+    name: string
+    file: string
+  }
 }
 
 type InitialStateType = {
@@ -51,7 +54,7 @@ export const getCategoryAction = createAsyncThunk(
 
 export const showCategoryAction = createAsyncThunk(
   'showCategoryAction',
-  async (uuid: string, token?: string = null) => {
+  async (uuid: string, token: string) => {
     return await showCategoryApi(uuid, token)
   }
 )

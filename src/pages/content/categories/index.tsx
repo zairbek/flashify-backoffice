@@ -9,11 +9,12 @@ import CardBox from "../../../components/CardBox";
 import SectionMain from '../../../components/SectionMain'
 import {RootState, useStoreDispatch} from "../../../stores/store";
 import {getCategoryAction} from "../../../stores/category/CategoryStore";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import Link from "next/link";
 import BaseButtons from "../../../components/BaseButtons";
 import {Category} from "../../../api/categories/GetCategoryApi";
 import {deleteCategoryApi} from "../../../api/categories/DeleteCategoryApi";
+import Image from "next/image";
 
 const Categories = () => {
   const dispatch = useStoreDispatch();
@@ -82,7 +83,10 @@ const Categories = () => {
                           <Link href={`/content/categories/${catalog.uuid}`}>{catalog.name}</Link>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">{catalog.slug}</td>
-                        <td className="whitespace-nowrap px-6 py-4">{catalog.icon}</td>
+
+                        <td className="whitespace-nowrap px-6 py-1">
+                          {catalog.icon ? (<Image src={catalog.icon.file} alt={catalog.icon.name} width={50} height={50}/>) : ''}
+                        </td>
                         <td className="whitespace-nowrap px-6 py-4">
                           <BaseButtons>
                             <BaseButton
@@ -137,4 +141,4 @@ Categories.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
 
-export default Categories;
+export default connect(state => state)(Categories);
